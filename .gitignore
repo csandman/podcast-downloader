@@ -1,0 +1,5 @@
+output/
+*.log
+.vscode/
+*output.json
+__pycache__
