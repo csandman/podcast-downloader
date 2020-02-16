@@ -11,3 +11,11 @@ Once you have pipenv, install this projects dependencies with `pipenv install`
 Next run `scrapy crawl podcasts` and wait for them all to download! Once downloaded they will end up in the `output/{podcast name}` folder within the project directory.
 
 Fair warning, podcast files are large so this will probably take a while, especially if there are a lot of episodes.
+
+#### Tasks
+
+[x] Download all podcasts from a series
+[ ] Dynamic input URL
+[ ] Episode numbering
+[ ] Add cover images
+[ ] Determine output file structure
