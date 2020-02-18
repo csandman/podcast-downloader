@@ -1,5 +1,22 @@
 # -*- coding: utf-8 -*-
 
+################################################################################
+############ SET THE VARIABLE BELOW TO BE THE LOCATION YOU WOULD ###############
+################## LIKE YOUR YOUR PODCASTS TO DOWNLOAD TO #####################
+################################################################################
+
+USER_DEFINED_OUTPUT = ''
+
+# Example Podcast List
+PODCAST_LIST = [
+    'https://podbay.fm/podcast/1200361736'
+]
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+
 # Scrapy settings for podcast_scraper project
 #
 # For simplicity, this file contains only settings considered important or
@@ -66,15 +83,21 @@ ROBOTSTXT_OBEY = False
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'podcast_scraper.pipelines.PodcastScraperPipeline': 1,
-    'scrapy.pipelines.images.ImagesPipeline': 2,
+    'podcast_scraper.pipelines.PodcastImagesPipeline': 2,
     'podcast_scraper.pipelines.PodcastFilesPipeline': 3,
 }
 
 MEDIA_ALLOW_REDIRECTS = True
 
-FILES_STORE = 'output/'
-IMAGES_STORE = 'output/images/'
 DOWNLOAD_TIMEOUT = 7200
+DOWNLOAD_MAXSIZE = 0
+DOWNLOAD_WARNSIZE = 0
+
+FILES_STORE = 'output/'
+IMAGES_STORE = 'output/'
+if USER_DEFINED_OUTPUT:
+    FILES_STORE = USER_DEFINED_OUTPUT
+    IMAGES_STORE = USER_DEFINED_OUTPUT
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html

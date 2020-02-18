@@ -23,6 +23,7 @@ class Podcast(Item):
     description = Field()
     episode_number = Field()
     cover_image = Field()
+    release_date = Field()
 
     # downloaded files
     file_urls = Field()

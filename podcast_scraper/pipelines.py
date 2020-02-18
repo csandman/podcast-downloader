@@ -6,13 +6,18 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import os
 import eyed3
+from pathlib import Path, PureWindowsPath
+from eyed3.id3 import genres
+from eyed3.id3.apple import PCST, PCST_FID, WFED, WFED_FID
 from slugify import slugify
 from scrapy.exporters import JsonItemExporter
 from scrapy.pipelines.files import FilesPipeline
+from scrapy.pipelines.images import ImagesPipeline
 from scrapy import Request
 from scrapy.utils.project import get_project_settings
 from scrapy.exceptions import DropItem
 from urllib.parse import urlparse
+from datetime import datetime
 
 
 class PodcastScraperPipeline(object):
@@ -28,6 +33,24 @@ class PodcastScraperPipeline(object):
     def close_spider(self, spider):
         self.exporter.finish_exporting()
         self.file.close()
+
+
+class PodcastImagesPipeline(ImagesPipeline):
+    def get_media_requests(self, item, info):
+        if item.get('image_urls'):
+            for file_url in item.get('image_urls'):
+                yield Request(
+                    file_url,
+                    meta={
+                        'podcast_name': item.get('podcast_name')
+                    }
+                )
+
+    def file_path(self, request, response=None, info=None):
+        podcast_name = request.meta['podcast_name']
+        fileName = os.path.basename(urlparse(request.url).path)
+        target_path = os.path.join(podcast_name, 'images', fileName)
+        return target_path
 
 
 class PodcastFilesPipeline(FilesPipeline):
@@ -50,6 +73,9 @@ class PodcastFilesPipeline(FilesPipeline):
 
         fileName = f'{title}.{fileExtension}'
         target_path = os.path.join(podcast_name, fileName)
+        # Convert path to Windows format
+        # path_on_windows = PureWindowsPath(target_path)
+        # print("WINDOWS PATH", path_on_windows)
         return target_path
 
     def item_completed(self, results, item, info):
@@ -73,7 +99,7 @@ class PodcastFilesPipeline(FilesPipeline):
                 audiofile.initTag()
 
             audiofile.tag.images.set(
-                3, open(full_image_path, 'rb').read(), 'image/jpeg')
+                0, open(full_image_path, 'rb').read(), 'image/jpeg')
 
             # audiofile.tag.images.set(type_=3, img_data=None, mime_type=None,
             #  img_url=item.get('cover_image'))
@@ -82,7 +108,18 @@ class PodcastFilesPipeline(FilesPipeline):
             audiofile.tag.album_artist = item.get('podcast_author')
             audiofile.tag.album = item.get('podcast_name')
             audiofile.tag.title = item.get('title')
+            release_date = item.get('release_date').strftime('%Y-%m-%d')
+            audiofile.tag.release_date = release_date
+            # audiofile.tag.comments = item.get('description')
+            audiofile.tag.genre = genres[186]  # Podcast genre
             # audiofile.tag.track_num = 2
+
+            # add itunes podcast tags
+            if PCST_FID not in audiofile.tag.frame_set:
+                audiofile.tag.frame_set[PCST_FID] = PCST()
+            if WFED_FID not in audiofile.tag.frame_set:
+                audiofile.tag.frame_set[WFED_FID] = WFED(
+                    "http://eyeD3.nicfit.net/")
 
             audiofile.tag.save()
 

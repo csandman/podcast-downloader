@@ -3,6 +3,9 @@ import json
 import re
 from podcast_scraper.items import Podcast
 from scrapy.exceptions import DropItem
+from datetime import datetime
+
+# https://podbay.fm/api/podcast?id=318185524&refresh=true
 
 
 class PodbaySpider(scrapy.Spider):
@@ -56,6 +59,10 @@ class PodbaySpider(scrapy.Spider):
 
         # GET DESCRIPTION
         podcast["description"] = podcastDict['description']
+
+        # GET RELEASE DATE
+        podcast["release_date"] = datetime.strptime(
+            podcastDict['published'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
         # GET MP3
         # images = []
