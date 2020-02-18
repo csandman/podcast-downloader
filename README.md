@@ -10,12 +10,18 @@ Once you have pipenv, install this projects dependencies with `pipenv install`
 
 Next run `scrapy crawl podcasts` and wait for them all to download! Once downloaded they will end up in the `output/{podcast name}` folder within the project directory.
 
-Fair warning, podcast files are large so this will probably take a while, especially if there are a lot of episodes.
+Just to note, if this process fails at any point, you can run it again and it will skip anything you've already downloaded, so that should make things a little easier!
+
+Fair warning, podcast files are large so this will probably take a while, especially if there are a lot of episodes. Also this can congest your internet connection so its better to run this when no one else is using it!
 
 #### Tasks
 
-[x] Download all podcasts from a series
-[ ] Dynamic input URL
-[ ] Episode numbering
-[ ] Add cover images
-[ ] Determine output file structure
+- [x] Download all podcasts from a series
+- [ ] Dynamic input URL
+- [ ] Episode numbering
+- [ ] Add cover images
+  - https://stackoverflow.com/questions/40515738/using-eyed3-to-embed-album-art-from-url
+  - https://stackoverflow.com/questions/38510694/how-to-add-album-art-to-mp3-file-using-python-3
+- [ ] Determine output file structure
+- [ ] Schudled task to download new episodes
+- [ ] Store images in the same directory (or a subdirectory of the podcast)
