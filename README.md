@@ -17,11 +17,12 @@ Fair warning, podcast files are large so this will probably take a while, especi
 #### Tasks
 
 - [x] Download all podcasts from a series
-- [ ] Dynamic input URL
+- [ ] Dynamic input URL list
 - [ ] Episode numbering
 - [ ] Add cover images
   - https://stackoverflow.com/questions/40515738/using-eyed3-to-embed-album-art-from-url
   - https://stackoverflow.com/questions/38510694/how-to-add-album-art-to-mp3-file-using-python-3
 - [ ] Determine output file structure
-- [ ] Schudled task to download new episodes
+  - [ ] User defined output location
+- [ ] Scheduled task to download new episodes
 - [ ] Store images in the same directory (or a subdirectory of the podcast)
